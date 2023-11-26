@@ -9,6 +9,8 @@ using namespace std;
 #define max_board_height 9
 #define max_board_width 19
 
+objPos myPos;
+
 #define DELAY_CONST 100000
 
 bool exitFlag;
@@ -46,6 +48,10 @@ void Initialize(void)
     MacUILib_clearScreen();
 
     exitFlag = false;
+
+    myPos.setObjPos(5, 5, '@');
+
+    
 }
 
 void GetInput(void)
@@ -94,12 +100,16 @@ void DrawScreen(void)
                 }
 
                 
+
+                
             }            
             
         }
         
         cout << endl;
     }
+
+    MacUILib_printf("\nObject: <%d, %d> with %c\n", myPos.x, myPos.y, myPos.symbol);
     //printf("\n");
     /*
     printf("Player Object Coordinates: \n", player_object.x, player_object.y);    
