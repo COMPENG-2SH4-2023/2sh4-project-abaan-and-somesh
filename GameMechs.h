@@ -26,6 +26,8 @@ class GameMechs
         int boardSizeY;
 
     public:
+        
+        
         GameMechs();
         GameMechs(int boardX, int boardY);
         
