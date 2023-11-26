@@ -2,6 +2,8 @@
 
 #include "MacUILib.h"
 #include "objPos.h"
+#include "GameMechs.h"
+#include "Player.h"
 
 
 using namespace std;
@@ -13,7 +15,9 @@ objPos myPos;
 
 #define DELAY_CONST 100000
 
-bool exitFlag;
+GameMechs* myGM;
+Player* myPlayer;
+
 
 void Initialize(void);
 void GetInput(void);
@@ -29,7 +33,7 @@ int main(void)
 
     Initialize();
 
-    while(exitFlag == false)  
+    while(myGM->getExitFlagStatus() == false)  
     {
         GetInput();
         RunLogic();
@@ -47,7 +51,8 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
-    exitFlag = false;
+    myGM = new GameMechs(26,13);
+    myPlayer =  new Player(myGM);
 
     myPos.setObjPos(5, 5, '@');
 
@@ -56,12 +61,12 @@ void Initialize(void)
 
 void GetInput(void)
 {
-   
+   myGM->getInput();
 }
 
 void RunLogic(void)
 {
-    
+    myPlayer->updatePlayerDir();
 }
 
 void DrawScreen(void)
@@ -109,7 +114,9 @@ void DrawScreen(void)
         cout << endl;
     }
 
-    MacUILib_printf("\nObject: <%d, %d> with %c\n", myPos.x, myPos.y, myPos.symbol);
+    objPos tempPos;
+    myPlayer->getPlayerPos(tempPos);
+    MacUILib_printf("BoardSize: %dx%d, Player Pos: <%d,%d> + %c\n",myGM->getBoardSizeX(),myGM->getBoardSizeY(),tempPos.x,tempPos.y,tempPos.symbol);
     //printf("\n");
     /*
     printf("Player Object Coordinates: \n", player_object.x, player_object.y);    
