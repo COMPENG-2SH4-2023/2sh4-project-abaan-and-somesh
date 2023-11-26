@@ -70,7 +70,8 @@ void DrawScreen(void)
         {
             if(y == 0 || y == max_board_height)
             {
-                printf("#");
+                
+                cout << "#";
                 
                 
             }
@@ -80,13 +81,15 @@ void DrawScreen(void)
                 
                 if(x == 0 || x == max_board_width)
                 {
-                    printf("#");
+                    
+                    cout << "#";
                     
                 }
 
                 else
                 {
-                    printf(" ");
+                    
+                    cout << " ";
                     
                 }
 
@@ -94,9 +97,10 @@ void DrawScreen(void)
             }            
             
         }
-        printf("\n");
+        
+        cout << endl;
     }
-    printf("\n");
+    //printf("\n");
     /*
     printf("Player Object Coordinates: \n", player_object.x, player_object.y);    
 
