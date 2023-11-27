@@ -8,8 +8,6 @@
 
 using namespace std;
 
-#define max_board_height 9
-#define max_board_width 19
 
 objPos myPos;
 
@@ -51,11 +49,11 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
-    myGM = new GameMechs(26,13);
+    myGM = new GameMechs();
     myPlayer =  new Player(myGM);
 
-    myPos.setObjPos(5, 5, '@');
-
+    //myPos.setObjPos(5, 5, '@');
+    
     
 }
 
@@ -66,7 +64,9 @@ void GetInput(void)
 
 void RunLogic(void)
 {
+
     myPlayer->updatePlayerDir();
+    myPlayer->movePlayer();
 }
 
 void DrawScreen(void)
@@ -74,12 +74,14 @@ void DrawScreen(void)
     MacUILib_clearScreen();   
 
     int x, y;
+    objPos* currentPlayerPos;
+    myPlayer->getPlayerPos(*currentPlayerPos);
     
-    for(y = 0; y <= max_board_height; y++)
+    for(y = 0; y <= myGM->getBoardSizeY(); y++)
     {
-        for(x = 0; x <= max_board_width; x++)
+        for(x = 0; x <= myGM->getBoardSizeX(); x++)
         {
-            if(y == 0 || y == max_board_height)
+            if(y == 0 || y == myGM->getBoardSizeY())
             {
                 
                 cout << "#";
@@ -87,15 +89,22 @@ void DrawScreen(void)
                 
             }
 
+            else if((x == currentPlayerPos->x) && (y == currentPlayerPos->y))
+            {
+                MacUILib_printf("%c", currentPlayerPos->symbol);
+            }
+
             else
             {
                 
-                if(x == 0 || x == max_board_width)
+                if(x == 0 || x == myGM->getBoardSizeX())
                 {
                     
                     cout << "#";
                     
                 }
+
+                
 
                 else
                 {
@@ -116,7 +125,38 @@ void DrawScreen(void)
 
     objPos tempPos;
     myPlayer->getPlayerPos(tempPos);
-    MacUILib_printf("BoardSize: %dx%d, Player Pos: <%d,%d> + %c\n",myGM->getBoardSizeX(),myGM->getBoardSizeY(),tempPos.x,tempPos.y,tempPos.symbol);
+    
+    MacUILib_printf("BoardSize: %dx%d, Player Pos: <%d,%d> + %c\n",
+                    myGM->getBoardSizeX() + 1,myGM->getBoardSizeY() + 1,
+                    tempPos.x,tempPos.y,tempPos.symbol);
+
+    myPlayer->printPlayerDir();
+    
+    /*
+    switch(myPlayer->myDir)
+    {
+        case STOP:
+            MacUILib_printf("Current Object State: STOP");
+            break;
+
+        case UP:
+            MacUILib_printf("Current Object State: UP");
+            break;
+        
+        case DOWN:
+            MacUILib_printf("Current Object State: DOWN");
+            break;
+        
+        case LEFT:
+            MacUILib_printf("Current Object State: LEFT");
+            break;
+
+        case RIGHT:
+            MacUILib_printf("Current Object State: RIGHT");
+            break;
+    }
+    */
+    
     //printf("\n");
     /*
     printf("Player Object Coordinates: \n", player_object.x, player_object.y);    

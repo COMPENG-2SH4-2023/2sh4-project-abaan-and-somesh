@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "MacUILib.h"
 
 
 Player::Player(GameMechs* thisGMRef)
@@ -7,7 +8,8 @@ Player::Player(GameMechs* thisGMRef)
     myDir = STOP;
 
     // more actions to be included
-    playerPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
+    playerPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2 + 1, 
+                        mainGameMechsRef->getBoardSizeY()/2 + 1, '*');
 }
 
 
@@ -53,7 +55,7 @@ void Player::updatePlayerDir()
         case 'd':
             if(myDir != LEFT && myDir != RIGHT)
             {
-                myDir = DOWN;
+                myDir = RIGHT;
             }
             break;
 
@@ -65,5 +67,71 @@ void Player::updatePlayerDir()
 void Player::movePlayer()
 {
     // PPA3 Finite State Machine logic
+    switch(myDir)
+    {
+        case UP:
+            playerPos.y--;
+            if(playerPos.y < 1)
+            {
+                playerPos.y = mainGameMechsRef->getBoardSizeY() - 1;
+            }
+            break;
+        
+        case LEFT:
+            playerPos.x--;
+            if(playerPos.x < 1)
+            {
+                playerPos.x = mainGameMechsRef->getBoardSizeX() - 1;
+            }
+            break;
+
+        case DOWN:
+            playerPos.y++;
+            if(playerPos.y > mainGameMechsRef->getBoardSizeY() - 1)
+            {
+                playerPos.y = 1;
+            }
+            break;
+
+        case RIGHT:
+            playerPos.x++;
+            if(playerPos.x > mainGameMechsRef->getBoardSizeX() - 1)
+            {
+                playerPos.x = 1;
+            }
+            break;
+
+        default:
+            break;
+    }
 }
 
+void Player::printPlayerDir()
+{
+    switch(myDir)
+    {
+        case UP:
+            
+            MacUILib_printf("Current Object Direction: UP");
+            break;
+        
+        case LEFT:
+            MacUILib_printf("Current Object Direction: LEFT");
+            break;
+
+        case DOWN:
+            MacUILib_printf("Current Object Direction: DOWN");
+            break;
+
+        case RIGHT:
+            MacUILib_printf("Current Object Direction: RIGHT");
+            break;
+
+        case STOP:
+            MacUILib_printf("Current Object Direction: STOP");
+            break;
+
+        default:
+            break;
+    }
+}

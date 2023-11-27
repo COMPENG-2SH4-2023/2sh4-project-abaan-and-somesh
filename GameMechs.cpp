@@ -5,8 +5,8 @@ GameMechs::GameMechs()
 {
     input = 0;
     exitFlag = false;
-    boardSizeX = 20;
-    boardSizeY = 10;
+    boardSizeX = 19;
+    boardSizeY = 9;
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
@@ -48,17 +48,17 @@ int GameMechs::getBoardSizeY()
 
 void GameMechs::setExitTrue()
 {
-
+    exitFlag = true;
 }
 
 void GameMechs::setInput(char this_input)
 {
-
+    input = this_input;
 }
 
 void GameMechs::clearInput()
 {
-
+    input = 0;
 }
 
 
