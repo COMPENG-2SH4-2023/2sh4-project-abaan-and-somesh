@@ -48,7 +48,9 @@ int GameMechs::getBoardSizeY()
 
 void GameMechs::setExitTrue()
 {
-    exitFlag = true;
+   
+        exitFlag = true;
+    
 }
 
 void GameMechs::setInput(char this_input)
@@ -59,6 +61,16 @@ void GameMechs::setInput(char this_input)
 void GameMechs::clearInput()
 {
     input = 0;
+}
+
+int GameMechs::getScore()
+{
+    return score;
+}
+
+void GameMechs::incrementScore()
+{
+    score ++; ;
 }
 
 

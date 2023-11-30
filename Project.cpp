@@ -64,9 +64,15 @@ void GetInput(void)
 
 void RunLogic(void)
 {
-
+    if (myGM->getInput() == 27)
+    {
+        myGM->setExitTrue();
+        return;
+    }
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
+    myGM->clearInput();
+    
 }
 
 void DrawScreen(void)
@@ -217,7 +223,9 @@ void LoopDelay(void)
 
 void CleanUp(void)
 {
-    MacUILib_clearScreen();    
+    MacUILib_clearScreen();  
+    delete myGM;
+    delete myPlayer;  
   
     MacUILib_uninit();
 }
