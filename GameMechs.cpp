@@ -32,6 +32,7 @@ char GameMechs::getInput()
     {
         input = MacUILib_getChar();
     }
+    
     return input;
 }
 
@@ -49,7 +50,7 @@ int GameMechs::getBoardSizeY()
 void GameMechs::setExitTrue()
 {
    
-        exitFlag = true;
+    exitFlag = true;
     
 }
 
@@ -70,7 +71,7 @@ int GameMechs::getScore()
 
 void GameMechs::incrementScore()
 {
-    score ++; ;
+    score ++; 
 }
 
 

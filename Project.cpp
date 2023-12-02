@@ -223,9 +223,9 @@ void LoopDelay(void)
 
 void CleanUp(void)
 {
-    MacUILib_clearScreen();  
-    delete myGM;
-    delete myPlayer;  
-  
+    MacUILib_clearScreen();    
     MacUILib_uninit();
+
+    delete myGM;
+    delete myPlayer; 
 }
