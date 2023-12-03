@@ -40,6 +40,9 @@ class GameMechs
         bool getExitFlagStatus();
         void setExitTrue();
 
+        bool getLoseFlagStatus();
+        void setLoseTrue();
+
         char getInput();
         void setInput(char this_input);
         void clearInput();
@@ -49,7 +52,12 @@ class GameMechs
         int getScore();
         void incrementScore();
 
-        void generateFood(objPos blockOff);
+        void generateFood(objPosArrayList* blockOff); // need to upgrade blockOff to entire snake body
+        //need to accept player body array list
+        //go through each array element to make sure they are all
+        //blocked off from random food generation
+
+
         void getFoodPos(objPos &returnPos);
       
 

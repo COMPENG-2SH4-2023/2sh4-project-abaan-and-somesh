@@ -1,6 +1,8 @@
 #include "GameMechs.h"
 #include "MacUILib.h"
 
+#include <ctime>
+
 GameMechs::GameMechs()
 {
     input = 0;
@@ -16,9 +18,14 @@ GameMechs::GameMechs()
 GameMechs::GameMechs(int boardX, int boardY)
 {
     input = 0;
+    score = 0;
+
     exitFlag = false;
+    loseFlag = false;
     boardSizeX = boardX;
     boardSizeY = boardY;
+
+    foodPos.setObjPos(-1, -1, 'o');
 }
 
 // do you need a destructor?
@@ -28,6 +35,11 @@ GameMechs::GameMechs(int boardX, int boardY)
 bool GameMechs::getExitFlagStatus()
 {
     return exitFlag;
+}
+
+bool GameMechs::getLoseFlagStatus()
+{
+    return loseFlag;
 }
 
 char GameMechs::getInput()
@@ -58,6 +70,13 @@ void GameMechs::setExitTrue()
     
 }
 
+void GameMechs::setLoseTrue()
+{
+   
+    loseFlag = true;
+    
+}
+
 void GameMechs::setInput(char this_input)
 {
     input = this_input;
@@ -78,18 +97,37 @@ void GameMechs::incrementScore()
     score++; 
 }
 
-void GameMechs::generateFood(objPos blockOff)
+void GameMechs::generateFood(objPosArrayList* blockOff)
 {
-    
+    srand(time(NULL));
 
     int randX, randY;
     char symbol = 'o';
+
+    bool isOverlap = false;
+
+    objPos tempBody;
+
+    
 
     do
     {
         randX = 1 + (rand() % (boardSizeX - 1));
         randY = 1 + (rand() % (boardSizeY - 1));
-    }while((randX == blockOff.x) && (randY == blockOff.y));
+
+        for(int i = 0; i < blockOff->getSize(); i++)
+        {
+            blockOff->getElement(tempBody, i);
+            
+            if((tempBody.x == randX) && (tempBody.y == randY))
+            {
+                isOverlap = true;
+                break;
+            }
+        }
+
+        
+    }while(isOverlap);
     foodPos.setObjPos(randX, randY, symbol);
 
 

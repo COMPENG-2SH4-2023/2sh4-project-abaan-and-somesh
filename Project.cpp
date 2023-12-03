@@ -4,6 +4,7 @@
 #include "objPos.h"
 #include "GameMechs.h"
 #include "Player.h"
+#include "objPosArrayList.h"
 
 
 using namespace std;
@@ -53,10 +54,14 @@ void Initialize(void)
     myPlayer =  new Player(myGM);
 
     objPos currentPlayerPos;
-    myPlayer->getPlayerPos(currentPlayerPos);
+    currentPlayerPos.setObjPos(-1, -1, 'o');
+
+    objPosArrayList* playerBody = myPlayer->getPlayerPos();
+
+    
 
     srand(time(NULL));
-    myGM->generateFood(currentPlayerPos);
+    myGM->generateFood(playerBody);
 
     //myPos.setObjPos(5, 5, '@');
     
@@ -75,15 +80,10 @@ void RunLogic(void)
         myGM->setExitTrue();
         return;
     }
-    objPos currentPlayerPos;
-    myPlayer->getPlayerPos(currentPlayerPos);
 
-    if (myGM->getInput() == 9)
-    {
-        srand(time(NULL));
-        myGM->generateFood(currentPlayerPos);
-        
-    }
+    
+
+    
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
     myGM->clearInput();
@@ -94,9 +94,14 @@ void DrawScreen(void)
 {
     MacUILib_clearScreen();   
 
+    bool drawn;
+
     int x, y;
-    objPos currentPlayerPos, currentFoodPos;
-    myPlayer->getPlayerPos(currentPlayerPos);
+    
+    objPosArrayList* playerBody = myPlayer->getPlayerPos();
+    objPos tempBody;
+    
+    objPos currentFoodPos;
     myGM->getFoodPos(currentFoodPos);
 
 
@@ -105,6 +110,22 @@ void DrawScreen(void)
     {
         for(x = 0; x <= myGM->getBoardSizeX(); x++)
         {
+            drawn = false;
+
+            for(int k = 0; k < playerBody->getSize(); k++)
+            {
+                playerBody->getElement(tempBody, k);
+                if((tempBody.x == x) && (tempBody.y == y))
+                {
+                    MacUILib_printf("%c", tempBody.symbol);
+                    
+                    drawn = true;
+                    break;
+                }
+            }
+
+            if(drawn) continue;
+
             if(y == 0 || y == myGM->getBoardSizeY())
             {
                 
@@ -113,10 +134,7 @@ void DrawScreen(void)
                 
             }
 
-            else if((x == currentPlayerPos.x) && (y == currentPlayerPos.y))
-            {
-                MacUILib_printf("%c", currentPlayerPos.symbol);
-            }
+            
 
             else if((x == currentFoodPos.x) && (y == currentFoodPos.y))
             {
@@ -152,16 +170,23 @@ void DrawScreen(void)
         cout << endl;
     }
 
-    objPos tempPos;
-    myPlayer->getPlayerPos(tempPos);
     
+    
+    /*
     MacUILib_printf("\nBoardSize: %dx%d, Player Pos: <%d,%d> + %c\n",
                     myGM->getBoardSizeX() + 1, myGM->getBoardSizeY() + 1,
                     tempPos.x,tempPos.y,tempPos.symbol);
+    */
 
+    MacUILib_printf("\nPlayer positions: \n");
+    
+
+    MacUILib_printf("\nFood position: <%d, %d>\n", currentFoodPos.x, currentFoodPos.y);
     myPlayer->printPlayerDir();
 
-    MacUILib_printf("\nEnter Tab key to regenerate food at new location\n");
+    MacUILib_printf("\nScore: %d\n", myGM->getScore());
+
+    
     
     /*
     switch(myPlayer->myDir)
@@ -249,7 +274,17 @@ void LoopDelay(void)
 void CleanUp(void)
 {
     MacUILib_clearScreen();    
+    if(myGM->getLoseFlagStatus())
+    {
+        MacUILib_printf("\nYou Lose !! you crashed the snake into itself\n");
+    }
+    else
+    {
+        MacUILib_printf("\nYou quit\n");
+    }
+    
     MacUILib_uninit();
+    
 
     delete myGM;
     delete myPlayer; 

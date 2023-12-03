@@ -1,6 +1,8 @@
 #include "Player.h"
 #include "MacUILib.h"
 
+#include <ctime>
+
 
 Player::Player(GameMechs* thisGMRef)
 {
@@ -8,20 +10,30 @@ Player::Player(GameMechs* thisGMRef)
     myDir = STOP;
 
     // more actions to be included
-    playerPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2 + 1, 
-                        mainGameMechsRef->getBoardSizeY()/2 + 1, '*');
+    objPos tempPos;
+    tempPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2 + 1, 
+                       mainGameMechsRef->getBoardSizeY()/2 + 1, '*');
+
+    playerPosList = new objPosArrayList();
+    playerPosList->insertHead(tempPos);
+
+    
+
+
+
 }
 
 
 Player::~Player()
 {
     // delete any heap members here
+    delete playerPosList;
 }
 
-void Player::getPlayerPos(objPos &returnPos)
+objPosArrayList* Player::getPlayerPos()
 {
-    returnPos.setObjPos(playerPos.x, playerPos.y, playerPos.symbol);
     // return the reference to the playerPos arrray list
+    return playerPosList;
 }
 
 void Player::updatePlayerDir()
@@ -66,44 +78,94 @@ void Player::updatePlayerDir()
 
 void Player::movePlayer()
 {
+    //objPos newHead;
+    objPos currHead;
+    playerPosList->getHeadElement(currHead);
+
+
     // PPA3 Finite State Machine logic
     switch(myDir)
     {
         case UP:
-            playerPos.y--;
-            if(playerPos.y < 1)
+            currHead.y--;
+            if(currHead.y < 1)
             {
-                playerPos.y = mainGameMechsRef->getBoardSizeY() - 1;
+                currHead.y = mainGameMechsRef->getBoardSizeY() - 1;
             }
             break;
         
         case LEFT:
-            playerPos.x--;
-            if(playerPos.x < 1)
+            currHead.x--;
+            if(currHead.x < 1)
             {
-                playerPos.x = mainGameMechsRef->getBoardSizeX() - 1;
+                currHead.x = mainGameMechsRef->getBoardSizeX() - 1;
             }
             break;
 
         case DOWN:
-            playerPos.y++;
-            if(playerPos.y > mainGameMechsRef->getBoardSizeY() - 1)
+            currHead.y++;
+            if(currHead.y > mainGameMechsRef->getBoardSizeY() - 1)
             {
-                playerPos.y = 1;
+                currHead.y = 1;
             }
             break;
 
         case RIGHT:
-            playerPos.x++;
-            if(playerPos.x > mainGameMechsRef->getBoardSizeX() - 1)
+            currHead.x++;
+            if(currHead.x > mainGameMechsRef->getBoardSizeX() - 1)
             {
-                playerPos.x = 1;
+                currHead.x = 1;
             }
             break;
 
+        case STOP:
         default:
             break;
     }
+
+    if(mainGameMechsRef->getScore() != 0)
+    {
+
+    
+        objPosArrayList* body = getPlayerPos();
+        objPos tempBody;
+
+        for(int k = 0; k < body->getSize(); k++)
+        {
+            body->getElement(tempBody, k);
+            if((tempBody.x == currHead.x) && (tempBody.y == currHead.y))
+            {
+                mainGameMechsRef->setLoseTrue();
+                mainGameMechsRef->setExitTrue();
+                return;
+            }
+        }
+    }
+
+
+
+    //new currHead should be added to playerPosList head
+    playerPosList->insertHead(currHead);
+
+    objPos currFoodPos;
+    mainGameMechsRef->getFoodPos(currFoodPos);
+
+    if((currHead.x == currFoodPos.x) && (currHead.y == currFoodPos.y))
+    {
+        objPosArrayList* playerBody = getPlayerPos();
+        mainGameMechsRef->generateFood(playerBody);
+        mainGameMechsRef->incrementScore();
+
+    }
+
+    else
+    {
+        //remove playerPosList tail
+        playerPosList->removeTail();
+
+    }
+
+    
 }
 
 void Player::printPlayerDir()
