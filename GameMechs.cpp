@@ -4,9 +4,13 @@
 GameMechs::GameMechs()
 {
     input = 0;
+    score = 0;
     exitFlag = false;
+    loseFlag = false;
     boardSizeX = 19;
     boardSizeY = 9;
+
+    foodPos.setObjPos(-1, -1, 'o');
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
@@ -71,7 +75,29 @@ int GameMechs::getScore()
 
 void GameMechs::incrementScore()
 {
-    score ++; 
+    score++; 
+}
+
+void GameMechs::generateFood(objPos blockOff)
+{
+    
+
+    int randX, randY;
+    char symbol = 'o';
+
+    do
+    {
+        randX = 1 + (rand() % (boardSizeX - 1));
+        randY = 1 + (rand() % (boardSizeY - 1));
+    }while((randX == blockOff.x) && (randY == blockOff.y));
+    foodPos.setObjPos(randX, randY, symbol);
+
+
+}
+
+void GameMechs::getFoodPos(objPos &returnPos)
+{
+    returnPos = foodPos;
 }
 
 

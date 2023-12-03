@@ -52,6 +52,12 @@ void Initialize(void)
     myGM = new GameMechs();
     myPlayer =  new Player(myGM);
 
+    objPos currentPlayerPos;
+    myPlayer->getPlayerPos(currentPlayerPos);
+
+    srand(time(NULL));
+    myGM->generateFood(currentPlayerPos);
+
     //myPos.setObjPos(5, 5, '@');
     
     
@@ -69,6 +75,15 @@ void RunLogic(void)
         myGM->setExitTrue();
         return;
     }
+    objPos currentPlayerPos;
+    myPlayer->getPlayerPos(currentPlayerPos);
+
+    if (myGM->getInput() == 9)
+    {
+        srand(time(NULL));
+        myGM->generateFood(currentPlayerPos);
+        
+    }
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
     myGM->clearInput();
@@ -80,8 +95,11 @@ void DrawScreen(void)
     MacUILib_clearScreen();   
 
     int x, y;
-    objPos* currentPlayerPos;
-    myPlayer->getPlayerPos(*currentPlayerPos);
+    objPos currentPlayerPos, currentFoodPos;
+    myPlayer->getPlayerPos(currentPlayerPos);
+    myGM->getFoodPos(currentFoodPos);
+
+
     
     for(y = 0; y <= myGM->getBoardSizeY(); y++)
     {
@@ -95,9 +113,14 @@ void DrawScreen(void)
                 
             }
 
-            else if((x == currentPlayerPos->x) && (y == currentPlayerPos->y))
+            else if((x == currentPlayerPos.x) && (y == currentPlayerPos.y))
             {
-                MacUILib_printf("%c", currentPlayerPos->symbol);
+                MacUILib_printf("%c", currentPlayerPos.symbol);
+            }
+
+            else if((x == currentFoodPos.x) && (y == currentFoodPos.y))
+            {
+                MacUILib_printf("%c", currentFoodPos.symbol);
             }
 
             else
@@ -132,11 +155,13 @@ void DrawScreen(void)
     objPos tempPos;
     myPlayer->getPlayerPos(tempPos);
     
-    MacUILib_printf("BoardSize: %dx%d, Player Pos: <%d,%d> + %c\n",
-                    myGM->getBoardSizeX() + 1,myGM->getBoardSizeY() + 1,
+    MacUILib_printf("\nBoardSize: %dx%d, Player Pos: <%d,%d> + %c\n",
+                    myGM->getBoardSizeX() + 1, myGM->getBoardSizeY() + 1,
                     tempPos.x,tempPos.y,tempPos.symbol);
 
     myPlayer->printPlayerDir();
+
+    MacUILib_printf("\nEnter Tab key to regenerate food at new location\n");
     
     /*
     switch(myPlayer->myDir)

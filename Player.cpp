@@ -112,23 +112,23 @@ void Player::printPlayerDir()
     {
         case UP:
             
-            MacUILib_printf("Current Object Direction: UP");
+            MacUILib_printf("\nCurrent Object Direction: UP\n");
             break;
         
         case LEFT:
-            MacUILib_printf("Current Object Direction: LEFT");
+            MacUILib_printf("\nCurrent Object Direction: LEFT\n");
             break;
 
         case DOWN:
-            MacUILib_printf("Current Object Direction: DOWN");
+            MacUILib_printf("\nCurrent Object Direction: DOWN\n");
             break;
 
         case RIGHT:
-            MacUILib_printf("Current Object Direction: RIGHT");
+            MacUILib_printf("\nCurrent Object Direction: RIGHT\n");
             break;
 
         case STOP:
-            MacUILib_printf("Current Object Direction: STOP");
+            MacUILib_printf("\nCurrent Object Direction: STOP\n");
             break;
 
         default:
