@@ -172,96 +172,21 @@ void DrawScreen(void)
 
     
     
-    /*
-    MacUILib_printf("\nBoardSize: %dx%d, Player Pos: <%d,%d> + %c\n",
-                    myGM->getBoardSizeX() + 1, myGM->getBoardSizeY() + 1,
-                    tempPos.x,tempPos.y,tempPos.symbol);
-    */
-
-    MacUILib_printf("\nPlayer positions: \n");
+    
     
 
-    MacUILib_printf("\nFood position: <%d, %d>\n", currentFoodPos.x, currentFoodPos.y);
-    myPlayer->printPlayerDir();
+    
 
     MacUILib_printf("\nScore: %d\n", myGM->getScore());
+    myPlayer->printPlayerDir();
+    
+    objPos currentHeadPos;
+    playerBody->getElement(currentHeadPos, 0);
+    MacUILib_printf("\nCurrent Head position: <%d, %d>\n", currentHeadPos.x, currentHeadPos.y);
 
     
     
-    /*
-    switch(myPlayer->myDir)
-    {
-        case STOP:
-            MacUILib_printf("Current Object State: STOP");
-            break;
-
-        case UP:
-            MacUILib_printf("Current Object State: UP");
-            break;
-        
-        case DOWN:
-            MacUILib_printf("Current Object State: DOWN");
-            break;
-        
-        case LEFT:
-            MacUILib_printf("Current Object State: LEFT");
-            break;
-
-        case RIGHT:
-            MacUILib_printf("Current Object State: RIGHT");
-            break;
-    }
-    */
     
-    //printf("\n");
-    /*
-    printf("Player Object Coordinates: \n", player_object.x, player_object.y);    
-
-    if(last_key_entered)
-    {
-        printf("Key Pressed: %c\n", last_key_entered);
-    }
-
-    else
-    {
-        printf("Key Pressed: \n");
-    }
-
-    switch(object_direction)
-    {
-        case STOP:
-            printf("Object Direction: STOP\n");
-            break;
-        
-        case UP:
-            printf("Object Direction: UP\n");
-            break;
-
-        case DOWN:
-            printf("Object Direction: DOWN\n");
-            break;
-
-        case LEFT:
-            printf("Object Direction: LEFT\n");
-            break;
-
-        case RIGHT:
-            printf("Object Direction: RIGHT\n");
-            break;
-    }
-
-    printf("Game speed: %d micro-seconds per frame\n", game_speed);
-    printf("Press '+' to increase speed and '-' to decrease speed\n\n"); 
-
-    printf("Mystery String: ");
-    int displayString;
-    for(displayString = 0; displayString < goalStringSize - 1; displayString++)
-    {
-        printf("%c", mysteryString[displayString]);
-    }
-    printf("\n");
-    printf("Move Count: %d", moveCount); 
-    */
 
 }
 
@@ -282,6 +207,7 @@ void CleanUp(void)
     {
         MacUILib_printf("\nYou quit\n");
     }
+    MacUILib_printf("\n Your final score was: %d\n", myGM->getScore());
     
     MacUILib_uninit();
     
